@@ -1,0 +1,30 @@
+    
+    // version of protocol buffer used
+    syntax = "proto3";
+    // package name for buffer will be used later
+    package hello;
+    // service which can be executed
+    service Say {
+    // takes a stream and returns a stream
+      rpc bidirectional(stream SayRequest) returns (stream SayResponse);
+    }
+    // argument
+    message SayRequest {
+      //Message from basestation
+      int32 base = 1;
+      int32 lower = 2;
+      int32 upper = 3;
+      int32 grip1 = 4;
+      int32 grip2 = 5;
+      int32 grip3 = 6;
+    }
+    // return value
+    message SayResponse {
+      //Message from rover
+      int32 base = 1;
+      int32 lower = 2;
+      int32 upper = 3;
+      int32 grip1 = 4;
+      int32 grip2 = 5;
+      int32 grip3 = 6;
+    }
