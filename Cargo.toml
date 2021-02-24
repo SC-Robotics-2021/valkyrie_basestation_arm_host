@@ -10,15 +10,20 @@ edition = "2018"
 name = "server"
 path = "src/server.rs"
 
-[[bin]]
-name = "client"
-path = "src/client.rs"
+#[[bin]]
+#name = "client"
+#path = "src/client.rs"
 
 [dependencies]
 prost = "0.6.1"
 tonic = {version="0.2.0",features = ["tls"]}
 tokio = {version="0.2.18",features = ["stream", "macros"]}
+rover_tonic = { git = "ssh://git@gitlab.com/saddeback_rover_2020/telecom/protos.git", branch = "master" }
+rover_postcard_protocol = {git = "ssh://git@gitlab.com/saddeback_rover_2020/telecom/postcard_protocol.git"}
+tokio-serial = "4.3.3"
+anyhow = "1.0.38"
 futures = "0.3"
+rand = "0.8.3"
 
 [build-dependencies]
 tonic-build = "0.2.0"
