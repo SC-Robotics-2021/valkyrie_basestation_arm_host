@@ -59,15 +59,3 @@ impl KinematicArmStateServicer for KinematicArmServer {
         }
     }
 }
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
-    //let addr = "[::1]:50051".parse().unwrap();
-    let addr = "[::]:50051".parse().unwrap();
-    let server = KinematicArmServer::new("/dev/ttyS0")?;
-    println!("Server listening on {}", addr);
-    Server::builder()
-        .add_service(KinematicArmStateServicerServer::new(server))
-        .serve(addr)
-        .await?;
-    Ok(())
-}

@@ -1,18 +1,10 @@
 [package]
-name = "bidir_rust"
+name = "kinematic_arm_provider"
 version = "0.1.0"
 authors = ["Von <von.simmons@gmail.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[[bin]]
-name = "server"
-path = "src/server.rs"
-
-#[[bin]]
-#name = "client"
-#path = "src/client.rs"
 
 [dependencies]
 prost = "0.6.1"
