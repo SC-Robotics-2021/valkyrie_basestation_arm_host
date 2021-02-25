@@ -17,7 +17,7 @@ impl KinematicArmServer {
                 path,
                 &SerialPortSettings {
                     baud_rate: 9600,
-                    data_bits: DataBits::Five,
+                    data_bits: DataBits::Eight,
                     flow_control: FlowControl::None,
                     parity: Parity::None,
                     stop_bits: StopBits::One,

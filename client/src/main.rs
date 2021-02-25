@@ -1,13 +1,23 @@
-use anyhow;
-use linux_embedded_hal::I2cdev;
-use jrk_g2_rs::{JrkG2I2c, JrkG2};
-fn main() -> anyhow::Result<()>{
+use tokio;
 
-    println!("Opening I2C bus...");
-    let i2c = I2cdev::new("/dev/i2c-1")?;
+mod driver;
 
-    let mut jrk_handle = JrkG2I2c::new(i2c);
+use rover_tonic::borealis::kinematic_arm_state_servicer_client::KinematicArmStateServicerClient;
+use rover_tonic::borealis::Empty;
 
-    jrk_handle.set_target(255)?;
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let mut client = KinematicArmStateServicerClient::connect("http://localhost:50051").await?;
+
+    let pose = client.get_arm_state(Empty {}).await?.into_inner();
+
+    println!("response.lower_axis := {:?}", pose.lower_axis);
+    println!("response.upper_axis := {:?}", pose.upper_axis);
+    println!("response.rotation := {:?}", pose.rotation);
+    println!("response.driving_arm := {:?}", pose.driving_arm);
+    println!("response.driving_gripper := {:?}", pose.driving_gripper);
+
+
     Ok(())
 }
+
