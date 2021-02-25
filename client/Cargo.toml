@@ -1,0 +1,22 @@
+[package]
+name = "kinematic_arm_consumer"
+version = "0.1.0"
+authors = ["Von <von.simmons@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+prost = "0.6.1"
+tonic = {version="0.2.0",features = ["tls"]}
+tokio = {version="0.2.18",features = ["stream", "macros"]}
+rover_tonic = { git = "ssh://git@gitlab.com/saddeback_rover_2020/telecom/protos.git", branch = "master" }
+rover_postcard_protocol = {git = "ssh://git@gitlab.com/saddeback_rover_2020/telecom/postcard_protocol.git"}
+linux-embedded-hal = "0.3.0"
+anyhow = "1.0.38"
+futures = "0.3"
+rand = "0.8.3"
+jrk-g2-rs = "1.0.1"
+
+[build-dependencies]
+tonic-build = "0.2.0"

@@ -6,8 +6,7 @@ use tonic::transport::Server;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    //let addr = "[::1]:50051".parse().unwrap();
-    let addr = "[::]:50051".parse().unwrap();
+    let addr = "[::]:50051".parse()?;
     let server = KinematicArmServer::new("/dev/ttyS0")?;
     println!("Server listening on {}", addr);
     Server::builder()
