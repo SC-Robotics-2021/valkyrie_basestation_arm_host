@@ -1,12 +1,10 @@
 use rover_postcard_protocol::Driver;
 use rover_tonic::borealis::kinematic_arm_state_servicer_server::{
-    KinematicArmStateServicer, KinematicArmStateServicerServer,
+    KinematicArmStateServicer,
 };
 use rover_tonic::borealis::{ArmState, Empty};
-use std::path::Path;
-use tokio::sync::mpsc;
 use tokio_serial::{DataBits, FlowControl, Parity, Serial, SerialPortSettings, StopBits};
-use tonic::{transport::Server, Request, Response, Status};
+use tonic::{ Request, Response, Status};
 
 pub struct KinematicArmServer {
     driver: Driver,
@@ -32,7 +30,7 @@ impl KinematicArmServer {
 
 #[tonic::async_trait]
 impl KinematicArmStateServicer for KinematicArmServer {
-    async fn get_arm_state(&self, request: Request<Empty>) -> Result<Response<ArmState>, Status> {
+    async fn get_arm_state(&self, _request: Request<Empty>) -> Result<Response<ArmState>, Status> {
         let hardware_response = self
             .driver
             .do_hardware_action(rover_postcard_protocol::rover_postcards::Request {
@@ -41,7 +39,7 @@ impl KinematicArmStateServicer for KinematicArmServer {
             })
             .await
             // need to manually map the error type as they arn't compatible
-            .or(Err(Status::aborted("failed to interrogate model arm.")))?;
+            .map_err(|_| Status::aborted("failed to interrogate model arm."))?;
         if let Some(rover_postcard_protocol::rover_postcards::ResponseKind::KinematicArmPose(
             pose,
         )) = hardware_response.data
