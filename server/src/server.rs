@@ -6,6 +6,8 @@ use rover_tonic::borealis::{ArmState, Empty};
 use tokio_serial::{DataBits, FlowControl, Parity, Serial, SerialPortSettings, StopBits};
 use tonic::{ Request, Response, Status};
 
+use tracing::debug;
+
 pub struct KinematicArmServer {
     driver: Driver,
 }
@@ -40,14 +42,15 @@ impl KinematicArmStateServicer for KinematicArmServer {
             .await
             // need to manually map the error type as they arn't compatible
             .map_err(|_| Status::aborted("failed to interrogate model arm."))?;
+        debug!("Response := {:?}", hardware_response);
         if let Some(rover_postcard_protocol::rover_postcards::ResponseKind::KinematicArmPose(
             pose,
         )) = hardware_response.data
         {
             Ok(Response::new(ArmState {
-                lower_axis: pose.lower_axis,
-                upper_axis: pose.upper_axis,
-                rotation: pose.rotation_axis,
+                lower_axis: pose.lower_axis.unwrap_or(0.0),
+                upper_axis: pose.upper_axis.unwrap_or(0.0),
+                rotation: pose.rotation_axis.unwrap_or(0.0),
                 gripper: None,
                 driving_arm: true,
                 driving_gripper: false,

@@ -1,4 +1,5 @@
 mod server;
+mod logging;
 
 use rover_tonic::borealis::kinematic_arm_state_servicer_server::KinematicArmStateServicerServer;
 use server::KinematicArmServer;
@@ -6,6 +7,7 @@ use tonic::transport::Server;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    logging::setup_logger();
     let addr = "[::]:50051".parse()?;
     let server = KinematicArmServer::new("/dev/ttyUSB0")?;
     println!("Server listening on {}", addr);
